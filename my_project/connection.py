@@ -133,7 +133,7 @@ async def ConnectMetaTrader(update: Update, context: ContextTypes.DEFAULT_TYPE):
             logger.info("Result Code: {}\n".format(result["stringCode"]))
 
         except Exception as error:
-            logger.info(f"\nTrade failed with error: {error}\n")
+            logger.error(f"\nTrade failed with error: {error}\n")
             await context.bot.send_message(
                 chat_id=update.effective_chat.id,
                 text=f"There was an issue 😕\n\nError Message:\n{error}",
