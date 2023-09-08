@@ -131,31 +131,31 @@ class Trade:
                 text=f"There was an issue 😕\n\nError Message:\n{error}",
             )
 
-    # Metodo per modificare un ordine in pending
-    def modify_order(
-        self, currency_pair, order_type, opening_price,
-    ):
-        pass
-
-    # Metodo per chiudere un ordine aperto
     def close_order(
         self, currency_pair, order_type, opening_price, stop_loss, take_profit,
     ):
         pass
 
-    # Metodo per cancellare un ordine in pending
     def cancel_order(
         self, currency_pair, order_type, opening_price, stop_loss, take_profit,
     ):
         pass
 
-    # Metodo per ignorare un ordine scritto male mandando avviso di errore
-    def ignore_message(
-        self, currency_pair, order_type, opening_price, stop_loss, take_profit,
+    def modify_opening_price(
+        self, currency_pair, order_type, opening_price,
     ):
         pass
 
-    # (QUESTO PER TESTARE CHE FUNZIONI IL BOT) Metodo per confermare che un ordine in pending si è aperto con successo
+    def modify_stop_loss(
+        self, currency_pair, order_type, opening_price,
+    ):
+        pass
+
+    def modify_take_profit(
+        self, currency_pair, order_type, opening_price,
+    ):
+        pass
+
     def confirm_open_order(
         self, currency_pair, order_type, opening_price, stop_loss, take_profit,
     ):

@@ -1,16 +1,25 @@
-from My_project.StartHelpCommand import *
-from My_project.Connection import connect_metatrader
+from my_project.StartHelpCommand import *
+from my_project.Connection import connect_metatrader
 from telegram.ext import (
     ApplicationBuilder,
     CommandHandler,
     MessageHandler,
     filters,
 )
+from dotenv import load_dotenv
+import logging
 import os
 
-
+load_dotenv()
 # Telegram Credentials
 TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
+
+# https://realpython.com/lessons/logging-python-introduction/
+# https://github.com/python-telegram-bot/python-telegram-bot/wiki/Exceptions%2C-Warnings-and-Logging
+logging.basicConfig(
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
+)
+logger = logging.getLogger(__name__)
 
 
 def main() -> None:
@@ -34,3 +43,4 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
