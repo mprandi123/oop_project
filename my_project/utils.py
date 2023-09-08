@@ -59,30 +59,30 @@ async def message_parser(update: Update, context: ContextTypes.DEFAULT_TYPE, con
 
         currency_pair = extract_currency_pair(text=text)
         # va bene anche solo currency_pair.group()
-        order_instance.set_currency_pair = (
+        order_instance.set_currency_pair(
             f"{currency_pair.group(1)}{currency_pair.group(2)}")
 
         order_type = extract_order_type(text=text)
-        order_instance.set_order_type = order_type.group().lower()
+        order_instance.set_order_type(order_type.group().lower())
 
         opening_price = extract_opening_price(text=text)
-        order_instance.set_opening_price = float(opening_price.group(1))
+        order_instance.set_opening_price(float(opening_price.group(1)))
 
         stop_loss = extract_stop_loss(text=text)
-        order_instance.set_stop_loss = float(stop_loss.group(1))
+        order_instance.set_stop_loss(float(stop_loss.group(1)))
 
         take_profit = extract_take_profit(text=text)
-        order_instance.set_take_profit = float(take_profit.group(1))
+        order_instance.set_take_profit(float(take_profit.group(1)))
 
         extracted_order_info = {
-            "Currency pair": order_instance.get_currency_pair,
-            "Order type": order_instance.get_order_type,
-            "Opening price": order_instance.get_opening_price,
-            "Stop loss": order_instance.get_stop_loss,
-            "Take profit": order_instance.get_take_profit,
+            "Currency pair": order_instance.get_currency_pair(),
+            "Order type": order_instance.get_order_type(),
+            "Opening price": order_instance.get_opening_price(),
+            "Stop loss": order_instance.get_stop_loss(),
+            "Take profit": order_instance.get_take_profit(),
         }
-
-        if extracted_order_info.values.all():
+        # da correggereeeeeee
+        if extracted_order_info.values():
             order_instance.create_new_order(
                 update=update, context=context, connection=connection)
         else:
