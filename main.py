@@ -1,5 +1,5 @@
-from my_project.command import *
-from my_project.connection import ConnectMetaTrader
+from My_project.StartHelpCommand import *
+from My_project.Connection import connect_metatrader
 from telegram.ext import (
     ApplicationBuilder,
     CommandHandler,
@@ -25,7 +25,7 @@ def main() -> None:
     help_handler = CommandHandler("help", help)
     application.add_handler(help_handler)
 
-    connection_handler = MessageHandler(filters.TEXT, ConnectMetaTrader)
+    connection_handler = MessageHandler(filters.TEXT, connect_metatrader)
     application.add_handler(connection_handler)
 
     # Every 60 seconds ask Telegram server if there is any new messages
