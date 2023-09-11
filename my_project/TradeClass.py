@@ -1,5 +1,7 @@
 from telegram import Update
 from telegram.ext import ContextTypes
+from metaapi_cloud_sdk.metaApi import metaApiConnectionInstance
+import logging
 
 
 class Trade:
@@ -47,11 +49,9 @@ class Trade:
     # Metodo per aprire un nuovo ordine a mercato o in pending
     async def create_new_order(
         self,
-        LOTS,
         update: Update,
         context: ContextTypes.DEFAULT_TYPE,
         connection,
-        logger,
     ):
         # enters trade on to MetaTrader account
         await context.bot.send_message(
@@ -64,7 +64,7 @@ class Trade:
             if self.order_type == "buy diretta a mercato":
                 result = await connection.create_market_buy_order(
                     self.currency_pair,
-                    LOTS,
+                    self.LOTS,
                     self.stop_loss,
                     self.take_profit,
                 )
@@ -72,7 +72,7 @@ class Trade:
             elif self.order_type == "buy limit":
                 result = await connection.create_limit_buy_order(
                     self.currency_pair,
-                    LOTS,
+                    self.LOTS,
                     self.opening_price,
                     self.stop_loss,
                     self.take_profit,
@@ -81,7 +81,7 @@ class Trade:
             elif self.order_type == "buy stop":
                 result = await connection.create_stop_buy_order(
                     self.currency_pair,
-                    LOTS,
+                    self.LOTS,
                     self.opening_price,
                     self.stop_loss,
                     self.take_profit,
@@ -90,7 +90,7 @@ class Trade:
             elif self.order_type == "sell diretta a mercato":
                 result = await connection.create_market_sell_order(
                     self.currency_pair,
-                    LOTS,
+                    self.LOTS,
                     self.stop_loss,
                     self.take_profit,
                 )
@@ -98,7 +98,7 @@ class Trade:
             elif self.order_type == "sell limit":
                 result = await connection.create_limit_sell_order(
                     self.currency_pair,
-                    LOTS,
+                    self.LOTS,
                     self.opening_price,
                     self.stop_loss,
                     self.take_profit,
@@ -107,7 +107,7 @@ class Trade:
             elif self.order_type == "sell stop":
                 result = await connection.create_stop_sell_order(
                     self.currency_pair,
-                    LOTS,
+                    self.LOTS,
                     self.opening_price,
                     self.stop_loss,
                     self.take_profit,
@@ -120,21 +120,45 @@ class Trade:
             )
 
             # prints success message to console
-            logger.info("\nTrade entered successfully!")
-            logger.info("Result Code: {}\n".format(result["stringCode"]))
+            logging.info("\nTrade entered successfully!")
+            logging.info("Result Code: {}\n".format(result["stringCode"]))
 
         except Exception as error:
-            logger.error(f"\nTrade failed with error: {error}\n")
+            logging.error(f"\nTrade failed with error: {error}\n")
 
             await context.bot.send_message(
                 chat_id=update.effective_chat.id,
                 text=f"There was an issue 😕\n\nError Message:\n{error}",
             )
 
-    def close_order(
-        self, currency_pair, order_type, opening_price, stop_loss, take_profit,
+    async def close_order(
+        self,
+        update: Update,
+        context: ContextTypes.DEFAULT_TYPE,
+        connection,
     ):
-        pass
+        try:
+            result = await connection.close
+
+            # sends success message to user
+            await context.bot.send_message(
+                chat_id=update.effective_chat.id,
+                text="Trade close successfully!",
+            )
+
+            # prints success message to console
+            logging.info("\nTrade entered successfully!")
+            logging.info(f"Result Code: {result['stringCode']}\n")
+
+        except Exception as error:
+            logging.error(f"\nTrade failed with error: {error}\n")
+
+            await context.bot.send_message(
+                chat_id=update.effective_chat.id,
+                text=f"There was an issue 😕\n\nError Message:\n{error}",
+            )
+
+
 
     def cancel_order(
         self, currency_pair, order_type, opening_price, stop_loss, take_profit,

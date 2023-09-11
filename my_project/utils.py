@@ -41,7 +41,7 @@ async def message_parser(update: Update, context: ContextTypes.DEFAULT_TYPE, con
     new_order = re.search(
         r"significa che bisogna piazzare un ordine pendente", text)
     # close open order
-    close_open_order = re.search(r"CHIUDERE", text)
+    close_open_order = re.search(r"CHIUDERE MANUALMENTE", text)
     # cancel order
     cancel_order = re.search(r"ANNULLARE", text)
     # modify opening price
@@ -81,34 +81,43 @@ async def message_parser(update: Update, context: ContextTypes.DEFAULT_TYPE, con
             "Stop loss": order_instance.get_stop_loss(),
             "Take profit": order_instance.get_take_profit(),
         }
-        # da correggereeeeeee
-        if extracted_order_info.values():
-            order_instance.create_new_order(
-                update=update, context=context, connection=connection)
-        else:
-            missing_info = [
-                key for key in extracted_order_info.keys if extracted_order_info.values is None]
-            await context.bot.send_message(
-                chat_id=update.effective_chat.id,
-                text=(
-                    f"You didn't insert all information. {missing_info} missing"),
-            )
 
         # for debug
         await context.bot.send_message(
             chat_id=update.effective_chat.id,
-            text=extracted_order_info,
+            text=f"Extracted infos: {extracted_order_info}"
         )
-"""
-    elif close_open_order:
-        
-    elif cancel_order:
-    elif modify_op:
-    elif modify_sl:
-    elif modify_tp:
-    elif conferm_opening_order:
-    
 
+        await order_instance.create_new_order(update=update, context=context, connection=connection)
+
+    elif close_open_order:
+        order_instance = Trade()
+        currency_pair = extract_currency_pair(text=text)
+        opening_price = extract_opening_price(text=text)
+        await order_instance.close_order(update=update, context=context, connection=connection)
+
+    elif cancel_order:
+        pass
+
+    elif modify_op:
+        pass
+    
+    elif modify_sl:
+        pass
+    
+    elif modify_tp:
+        pass
+    
+    elif conferm_opening_order:  
+        pass
+
+    else:
+        await context.bot.send_message(
+            chat_id=update.effective_chat.id,
+            text="I wasn't able to extract useful informations from your message. 😕",
+        )
+"""     
+ 
     
     except:
         await context.bot.send_message(
