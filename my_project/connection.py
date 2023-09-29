@@ -1,10 +1,9 @@
 from telegram import Update
 from telegram.ext import ContextTypes
 from metaapi_cloud_sdk import MetaApi
-from my_project.Utils import message_parser
 import os
 import logging
-
+from my_project.utils import message_parser
 
 # MetaAPI Credentials
 API_KEY = os.getenv("API_KEY")
@@ -49,12 +48,6 @@ async def connect_metatrader(update: Update, context: ContextTypes.DEFAULT_TYPE)
         logging.info("Waiting for SDK to synchronize to terminal state ...")
         await connection.wait_synchronized()
 
-        ###################################################################################################
-        # ATTUALMENTE VARIABILE NON USATA
-        ###################################################################################################
-        # obtains account information from MetaTrader server (balance, margin, ecc ecc)
-        account_information = await connection.get_account_information()
-
         await context.bot.send_message(
             chat_id=update.effective_chat.id,
             text="Successfully connected to MetaTrader!\n",
@@ -67,10 +60,6 @@ async def connect_metatrader(update: Update, context: ContextTypes.DEFAULT_TYPE)
             text=f"There was an issue with the connection 😕\n\nError Message:\n{error}",
         )
 
-    await message_parser(update=update, context=context,
-                         connection=connection)
+    await message_parser(update=update, context=context, connection=connection)
 
-
-async def get_terminal_info(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    # TO IMPLEMENT
-    return
+    return 
